@@ -56,6 +56,7 @@ const SKIP_DIRS = new Set([
   ".venv",
   "venv",
   "vendor",
+  "_legacy",
 ]);
 
 function isTextFile(filePath) {
