@@ -1,0 +1,27 @@
+{
+  "name": "ptd-cli",
+  "version": "1.0.0",
+  "description": "Convert a project folder into a single text document for AI context.",
+  "type": "module",
+  "bin": {
+    "ptd": "bin/ptd.mjs"
+  },
+  "files": [
+    "bin"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "cli",
+    "documentation",
+    "context",
+    "ai",
+    "text"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gdguest/ptd-cli.git"
+  }
+}
