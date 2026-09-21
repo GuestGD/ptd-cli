@@ -1,54 +1,24 @@
 # ptd-cli
 
-Convert a project folder into a single text document — one `.txt` with the
-entire source tree inlined, ready to paste into an AI assistant's context
-window.
+Convert a project folder into a single text document — one `.txt` with the entire source tree inlined, ready to paste into an AI assistant's context window.
 
-Walks the directory tree, filters by file extension, skips binary files and
-common build/dependency folders (`node_modules`, `dist`, `.git`, etc.), and
-writes each surviving file into a single output with a `FILE: /path` header.
+Walks a directory tree, filters by file extension, skips binary files and common build folders (`node_modules`, `dist`, `.git`, `_legacy`, etc.), and writes each file into one output with a `FILE: /path` header.
 
 ## Install
-
-### From GitHub (recommended if npm registry publish is blocked)
 
 ```bash
 npm i -D github:GuestGD/ptd-cli
 ```
 
-Pin to a specific tag or commit:
+Pin a specific version:
 
 ```bash
 npm i -D github:GuestGD/ptd-cli#v1.0.0
 ```
 
-npm clones the repo, reads `package.json` → `bin`, and drops the `ptd`
-executable into `node_modules/.bin/`. No registry account, no 2FA, no
-publishing step.
-
-### From the npm registry
-
-```bash
-npm i -D ptd-cli
-```
-
-Or run it once without adding it to your project:
-
-```bash
-npx ptd-cli src src.txt
-```
-
-### From a local tarball
-
-For offline use or while iterating on ptd itself:
-
-```bash
-npm i -D /path/to/ptd-cli-1.0.0.tgz
-```
-
 ## Usage
 
-If you installed as a dependency, add a script to your `package.json`:
+Add a script to `package.json`:
 
 ```json
 {
@@ -58,20 +28,19 @@ If you installed as a dependency, add a script to your `package.json`:
 }
 ```
 
-Then run:
+Run:
 
 ```bash
 npm run ptd
 ```
 
-Without a script, invoke the binary directly:
+Or without a script:
 
 ```bash
 npx ptd src src.txt
 ```
 
-Both arguments are optional. Defaults are `src` for the input folder and
-`src.txt` for the output file, so from a project root this just works:
+Both arguments are optional. Defaults: `src` for input folder, `src.txt` for output file. From a project root:
 
 ```bash
 npx ptd
@@ -79,10 +48,10 @@ npx ptd
 
 ## Arguments
 
-| Position | Name          | Default   | Description                                                            |
-| -------- | ------------- | --------- | ---------------------------------------------------------------------- |
-| 1        | `INPUT_DIR`   | `src`     | Folder to walk. Relative to the current working directory.             |
-| 2        | `OUTPUT_FILE` | `src.txt` | Where to write the document. Parent folders are created automatically. |
+| Position | Name          | Default   | Description                          |
+| -------- | ------------- | --------- | ------------------------------------ |
+| 1        | `INPUT_DIR`   | `src`     | Folder to walk, relative to the CWD. |
+| 2        | `OUTPUT_FILE` | `src.txt` | Where to write the document.         |
 
 ## Output format
 
@@ -108,12 +77,9 @@ END OF DOCUMENT
 ================================================================================
 ```
 
-Paths are relative to `INPUT_DIR`, so `src/main.tsx` becomes `FILE: /main.tsx`.
-The output file itself is never included in its own scan.
+Paths are relative to `INPUT_DIR` — `src/main.tsx` becomes `FILE: /main.tsx`. The output file is never included in its own scan.
 
-## What gets included
-
-Files whose extension is in:
+## Included extensions
 
 ```
 .ts .tsx .js .jsx .py .java .cpp .c .h .cs .go .rs .rb .php .swift .kt
@@ -121,9 +87,9 @@ Files whose extension is in:
 .bash .ps1 .vue .svelte .astro .prisma
 ```
 
-Plus `Dockerfile` and `Makefile` (no extension).
+Plus `Dockerfile` and `Makefile`.
 
-## What gets skipped
+## Skipped
 
 Directories:
 
@@ -132,19 +98,7 @@ node_modules  .git  dist  build  .next  out  coverage
 __pycache__  .venv  venv  vendor  _legacy
 ```
 
-Also skipped:
-
-- anything starting with `.` (dotfiles, hidden folders)
-- files whose first 1 KB contains a `\0` byte (crude binary detection)
-- the output file itself
-
-## Why GitHub install
-
-npm has been tightening its 2FA policy: as of 2026, publishing with a
-standard OTP flow is increasingly restricted, and tokens that bypass 2FA are
-being phased out. Installing a CLI directly from GitHub sidesteps the
-registry entirely — npm just clones the repo and wires up `bin`. Works the
-same as a registry install from the consumer's side.
+Also skipped: dotfiles, binary files (first 1 KB contains `\0`), and the output file itself.
 
 ## License
 
